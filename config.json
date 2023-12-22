@@ -1,0 +1,9 @@
+{
+	"answers_per_question" : 6,
+	"number_of_questions" : 6,
+	"number_of_versions" : 2,
+	"answer_keys" : {
+		"A" : ["A", "B", "C", "D", "E", "F"],
+		"B" : "ACDEFC"
+	}
+}

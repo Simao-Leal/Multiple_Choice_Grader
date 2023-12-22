@@ -1,0 +1,5 @@
+
+!src/OMRChecker-master/*
+.DS_Store
+*.pdf
+*.jpg

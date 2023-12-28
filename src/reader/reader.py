@@ -4,6 +4,7 @@ import csv
 import xlwt
 import xlrd
 import string
+import re
 
 # Create a styles
 red = xlwt.easyxf('pattern: pattern solid, fore_colour red;')
@@ -29,8 +30,9 @@ def reader(number_of_questions, number_of_versions, number_of_answers):
     student_list = dict()
     wb = xlrd.open_workbook(student_list_file)
     ws = wb.sheet_by_index(0)
-    for number, ist_id, name in zip(ws.col_slice(1,1), ws.col_slice(0,1), ws.col_slice(2,1)):
-        student_list[str(int(number.value))] = (ist_id.value, name.value)
+    for number, ist_id, name, degree in zip(ws.col_slice(1,1), ws.col_slice(0,1), ws.col_slice(2,1), ws.col_slice(9,1)):
+        short_degree = re.search("-\s(\w*)\s", degree.value).group(1)
+        student_list[str(int(number.value))] = (ist_id.value, name.value, short_degree)
 
     #OMR analysis 
     os.system("rm -r output/*")
@@ -41,7 +43,7 @@ def reader(number_of_questions, number_of_versions, number_of_answers):
     file = glob.glob('output/OMR_output/Results/Results*.csv')[0]
     wb = xlwt.Workbook()
     ws = wb.add_sheet('Results')
-    header = ["Input File", "IST-ID", "Number", "Name (from student list)", "Version"] + [f"q{i}" for i in range(1, number_of_questions + 1)]
+    header = ["Input File", "IST-ID", "Number", "Name", "Degree", "Version"] + [f"q{i}" for i in range(1, number_of_questions + 1)]
     for i, t in enumerate(header):
         ws.write(0, i, t, header_style)
 
@@ -63,38 +65,36 @@ def reader(number_of_questions, number_of_versions, number_of_answers):
 
             if number in student_list:
                 if number not in already_read:
-                    ist_id, name = student_list[number]
-                    ws.write(i, 1, ist_id)
+                    ist_id, name, degree = student_list[number]
                     ws.write(i, 2, number)
-                    ws.write(i, 3, name)
                     already_read.append(number)
                 else:
                     error_counter += 1
-                    ist_id, name = "DUPLICATE", "THIS STUDENT NUMBER WAS SEEN TWICE"
-                    ws.write(i, 1, ist_id)
+                    ist_id, name, degree = "DUPLICATE", "THIS STUDENT NUMBER WAS SEEN TWICE", "DUPLICATE"
                     ws.write(i, 2, number, red)
-                    ws.write(i, 3, name)
             else:
                 error_counter += 1
-                ist_id, name = "NOT FOUND", "STUDENT NUMBER NOT FOUND IN STUDENT LIST"
-                ws.write(i, 1, ist_id)
+                ist_id, name, degree = "NOT FOUND", "STUDENT NUMBER NOT FOUND IN STUDENT LIST", "NOT FOUND"
                 ws.write(i, 2, number, red)
-                ws.write(i, 3, name)
+
+            ws.write(i, 1, ist_id)
+            ws.write(i, 3, name)
+            ws.write(i, 4, degree)
 
             if version in string.ascii_uppercase[:number_of_versions]:
-                ws.write(i, 4, version)
+                ws.write(i, 5, version)
             else:
                 error_counter += 1
-                ws.write(i, 4, "ERR", red)
+                ws.write(i, 5, "ERR", red)
             
-            for j, t in enumerate(answers, start=5):
+            for j, t in enumerate(answers, start=6):
                 if t not in list(string.ascii_uppercase[:number_of_answers]):
                     warning_counter += 1
                     ws.write(i, j, "", yellow)
                 else:
                     ws.write(i, j, t)
 
-            for column, width in enumerate([3000,3000,2000,12000,2000] + [1000] * number_of_questions):
+            for column, width in enumerate([3000,3000,2000,12000,3000,2000] + [1000] * number_of_questions):
                 ws.col(column).width = width
 
     wb.save("output/reading_results.xls")

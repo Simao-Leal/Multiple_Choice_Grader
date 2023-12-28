@@ -90,8 +90,6 @@ def answer_sheet_maker(number_of_questions, number_of_answers, number_of_version
     with tempfile.TemporaryDirectory() as directory:
         with open(f"{directory}/bubble_sheet.tex", "w") as f:
             f.write(file)
-            
-        os.system(f"cp {directory}/bubble_sheet.tex /Users/simaoleal/Desktop/idk.tex")
         
         os.system(f"pdflatex -output-directory={directory} --interaction=batchmode {directory}/bubble_sheet.tex")
         

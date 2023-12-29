@@ -5,16 +5,7 @@ import xlwt
 import xlrd
 import string
 import re
-#import src
-from src.toolbox import remove_left_zeros, get_student_list
-
-# Styles
-red = xlwt.easyxf('pattern: pattern solid, fore_colour red;', num_format_str='@')
-yellow = xlwt.easyxf('pattern: pattern solid, fore_colour yellow;', num_format_str='@')
-header_style = xlwt.easyxf('pattern: pattern solid, fore_colour gray25;', num_format_str='@')
-right_aligned = xlwt.easyxf("align: horiz right;", num_format_str='@')
-text_style = xlwt.easyxf(num_format_str='@')
-
+from src.toolbox import remove_left_zeros, get_student_list, red, yellow, header_style, right_aligned, text_style
 
 
 def reader(number_of_questions, number_of_versions, number_of_answers):
@@ -29,7 +20,7 @@ def reader(number_of_questions, number_of_versions, number_of_answers):
     file = glob.glob('output/OMR_output/Results/Results*.csv')[0]
     wb = xlwt.Workbook()
     ws = wb.add_sheet('Results')
-    header = ["Input File", "IST-ID", "Number", "Name", "Degree", "Version"] + [f"q{i}" for i in range(1, number_of_questions + 1)]
+    header = ["Input File", "IST-ID", "Number", "Name", "Degree", "Version"] + [f"Q{i}" for i in range(1, number_of_questions + 1)]
     for i, t in enumerate(header):
         ws.write(0, i, t, header_style)
 
@@ -80,7 +71,7 @@ def reader(number_of_questions, number_of_versions, number_of_answers):
                 else:
                     ws.write(i, j, t)
 
-            for column, width in enumerate([3000,3000,2000,12000,3000,2000] + [1000] * number_of_questions):
+            for column, width in enumerate([3000,3000,2000,12000,3000,2000] + [1150] * number_of_questions):
                 ws.col(column).width = width
 
     wb.save("output/reading_results.xls")

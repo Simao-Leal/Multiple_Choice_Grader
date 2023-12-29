@@ -6,3 +6,4 @@
 *.xls
 OMR_input/template.json
 output/OMR_output/Results/Results*.csv
+*.pyc

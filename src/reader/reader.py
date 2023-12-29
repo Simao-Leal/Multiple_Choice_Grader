@@ -5,38 +5,24 @@ import xlwt
 import xlrd
 import string
 import re
+#import src
+from src.toolbox import remove_left_zeros, get_student_list
 
-# Create a styles
-red = xlwt.easyxf('pattern: pattern solid, fore_colour red;')
-yellow = xlwt.easyxf('pattern: pattern solid, fore_colour yellow;')
-header_style = xlwt.easyxf('pattern: pattern solid, fore_colour gray25; font: bold on')
-right_aligned = xlwt.easyxf("align: horiz right;")
+# Styles
+red = xlwt.easyxf('pattern: pattern solid, fore_colour red;', num_format_str='@')
+yellow = xlwt.easyxf('pattern: pattern solid, fore_colour yellow;', num_format_str='@')
+header_style = xlwt.easyxf('pattern: pattern solid, fore_colour gray25;', num_format_str='@')
+right_aligned = xlwt.easyxf("align: horiz right;", num_format_str='@')
+text_style = xlwt.easyxf(num_format_str='@')
 
-def remove_left_zeros(number):
-    if number == "":
-        return ""
-    else: 
-        return str(int(number))
+
 
 def reader(number_of_questions, number_of_versions, number_of_answers):
-    #extracting student list
-    files = glob.glob('input/*.xls')
-    if len(files) == 0:
-        raise Exception("No .xls file found")
-    elif len(files) > 1:
-        raise Exception("Multiple .xls files found")  
-    else:
-        student_list_file = files[0]
-    student_list = dict()
-    wb = xlrd.open_workbook(student_list_file)
-    ws = wb.sheet_by_index(0)
-    for number, ist_id, name, degree in zip(ws.col_slice(1,1), ws.col_slice(0,1), ws.col_slice(2,1), ws.col_slice(9,1)):
-        short_degree = re.search("-\s(\w*)\s", degree.value).group(1)
-        student_list[str(int(number.value))] = (ist_id.value, name.value, short_degree)
+    student_list = get_student_list()
 
     #OMR analysis 
-    os.system("rm -r output/*")
-    os.system("python3 src/OMRChecker-master/main.py --inputDir OMR_input --outputDir output")
+    os.system("rm -f -r output/*")
+    os.system("python src/OMRChecker-master/main.py --inputDir OMR_input --outputDir output")
     os.system("mv output/input output/OMR_output")
 
     #writing results to excel
@@ -57,7 +43,7 @@ def reader(number_of_questions, number_of_versions, number_of_answers):
         warning_counter = 0
 
         for i, line in enumerate(results, start=1):
-            input_file, _, _, _, version, number, *answers = line
+            _, input_file, _, _, version, number, *answers = line
 
             ws.write(i, 0, input_file, right_aligned)
 
@@ -66,7 +52,7 @@ def reader(number_of_questions, number_of_versions, number_of_answers):
             if number in student_list:
                 if number not in already_read:
                     ist_id, name, degree = student_list[number]
-                    ws.write(i, 2, number)
+                    ws.write(i, 2, number, text_style)
                     already_read.append(number)
                 else:
                     error_counter += 1

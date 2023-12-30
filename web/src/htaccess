@@ -1,4 +1,0 @@
-AuthName "co20XXX"
-AuthType Basic
-AuthUserFile /afs/ist.utl.pt/users/3/1/ist13131/web/co20/XXX/.htpasswd
-require valid-user

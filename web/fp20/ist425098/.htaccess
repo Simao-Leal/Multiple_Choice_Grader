@@ -1,4 +1,0 @@
-AuthName "fp20ist425098"
-AuthType Basic
-AuthUserFile /afs/ist.utl.pt/users/3/1/ist13131/web/fp20/ist425098/.htpasswd
-require valid-user

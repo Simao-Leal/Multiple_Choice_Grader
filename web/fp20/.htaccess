@@ -1,6 +1,0 @@
-<Files passwd.txt>
-AuthName "fp"
-AuthType Basic
-AuthUserFile /afs/ist.utl.pt/users/3/1/ist13131/web/fp20/.htpasswd
-require valid-user
-</Files>

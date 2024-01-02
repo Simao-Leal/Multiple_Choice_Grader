@@ -12,12 +12,12 @@ def reader(number_of_questions, number_of_versions, number_of_answers):
     student_list = get_student_list()
 
     #OMR analysis 
-    os.system("rm -f -r output/*")
-    os.system("python src/OMRChecker-master/main.py --inputDir OMR_input --outputDir output")
-    os.system("mv output/input output/OMR_output")
+    os.system("rm -f -r aux/OMR_output")
+    os.system("python src/OMRChecker-master/main.py --inputDir aux/OMR_input --outputDir aux")
+    os.system("mv aux/input aux/OMR_output")
 
     #writing results to excel
-    file = glob.glob('output/OMR_output/Results/Results*.csv')[0]
+    file = glob.glob('aux/OMR_output/Results/Results*.csv')[0]
     wb = xlwt.Workbook()
     ws = wb.add_sheet('Results')
     header = ["Input File", "Number", "Name", "Degree", "Version"] + [f"Q{i}" for i in range(1, number_of_questions + 1)]

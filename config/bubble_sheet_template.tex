@@ -1,0 +1,59 @@
+% DO NOT EDIT
+\documentclass[a4paper]{{article}}
+\usepackage{{tikz}}
+\usetikzlibrary{{calc}}
+\usepackage{{subfig}}
+\usepackage[a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm]{{geometry}}
+\usepackage{{amssymb}}
+\usepackage{{eso-pic}}
+\pagestyle{{empty}}
+
+\newcommand{{\radius}}{{6pt}}
+\setlength{{\parindent}}{{0pt}}
+\begin{{document}}
+
+\begin{{minipage}}[c][4.5cm][c]{{\textwidth}}
+
+% CAN EDIT THIS
+\begin{{center}}
+    \Large Instituto Superior Técnico
+    
+    Algoritmos e Modelação Computacional
+\end{{center}}
+
+\vspace{{50pt}}
+{{\Large\textbf{{Nome:}}}}
+\hrulefill
+\quad
+{{\Large\textbf{{Curso:}}}}
+\rule{{75pt}}{{0.25pt}}
+
+%DO NOT EDIT
+\end{{minipage}}
+\vspace{{10pt}}
+{{\Large\textbf{{Número de Aluno:}}}}
+\begin{{tikzpicture}}[baseline = -0.2cm]
+    \foreach \column in {{1,2,...,6}} {{
+        \begin{{scope}}[xshift= 7*\column mm]
+            \node[rectangle, draw, minimum width=5mm, minimum height=6mm] at (0,0) {{}};
+            \foreach \number in {{0,1,...,9}} {{ 
+                \draw (0, {{-(0.1 + (\number + 1) * 0.55)}}) circle[radius=\radius] node {{\number}};
+            }}
+        \end{{scope}}
+    }}
+\end{{tikzpicture}}
+\hfill
+{{\Large\textbf{{Versão:}}}}
+\begin{{tikzpicture}}[baseline = -5pt]
+{version_bubbles}
+\end{{tikzpicture}}
+
+\bigskip
+\begin{{center}}
+    \Large \textbf{{Folha de Respostas}}
+\end{{center}}
+
+\begin{{tikzpicture}}[remember picture, overlay, xshift = -4.1cm, yshift = 0.1cm]
+{question_bubbles}
+\end{{tikzpicture}}
+\end{{document}}

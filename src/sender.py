@@ -44,7 +44,7 @@ def sender():
     with open(files[0], 'r') as f:
         email_adresses = json.load(f)
     
-    with open('src/sender/email_text.txt', 'r') as f:
+    with open('config/email_text.txt', 'r') as f:
         lines = f.readlines()
         subject = lines[0]
         body = '\n'.join(lines[1:])

@@ -5,6 +5,8 @@ import string
 from config.grading_function import grading_function
 import xlwt
 import json
+from tqdm import tqdm
+import subprocess
 
 def evaluation_report_maker(file_name, exam_name, exam_date, name, number, course, version,
                              answer_key, answers, correct, incorrect, unanswered, grade, path):
@@ -38,7 +40,7 @@ def evaluation_report_maker(file_name, exam_name, exam_date, name, number, cours
     for i in range(0, len(answer_key), 20):
         tables += make_table(answer_key[i:i+20], answers[i:i+20], i + 1)
 
-    with open("src/grader/evaluation_report_template.tex", 'r') as f:
+    with open("config/evaluation_report_template.tex", 'r') as f:
         tex = f.read().format(exam_name=exam_name, exam_date=exam_date, name=name, number=number, course=course, version=version,
                              tables=tables, no_correct=correct, no_incorrect=incorrect, no_unanswered=unanswered, grade=grade, path=path)
 
@@ -46,7 +48,9 @@ def evaluation_report_maker(file_name, exam_name, exam_date, name, number, cours
         with open(f"{directory}/evaluation_report.tex", "w") as f:
             f.write(tex)
         
-        os.system(f"pdflatex -output-directory={directory} --interaction=batchmode {directory}/evaluation_report.tex")
+
+        subprocess.run(["pdflatex", f"-output-directory={directory}", "-interaction=nonstopmode", f"{directory}/evaluation_report.tex"],
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
         os.system("mkdir -p output/evaluation_reports")
         os.system(f"cp {directory}/evaluation_report.pdf output/evaluation_reports/{file_name}.pdf")
        
@@ -89,10 +93,11 @@ def grader(exam_name, exam_date, number_of_versions, number_of_questions, answer
     for i, t in enumerate(header):
         detailed_sheet.write(0, i, t, header_style)
 
+    print('Writing excel and evaluation reports:')
     #writing excel and evaluation reports
     numbers = list(reading_results.keys())
     numbers.sort(key=lambda x: int(x))
-    for row, number in enumerate(numbers, start=1):
+    for row, number in enumerate(tqdm(numbers), start=1):
         email, name, degree = student_list[number]
         input_file, version, answers = reading_results[number]
 
@@ -163,6 +168,8 @@ def grader(exam_name, exam_date, number_of_versions, number_of_questions, answer
     #save email adresses
     with open('output/evaluation_reports/email_adresses.json', 'w') as f:
         json.dump(email_adresses, f)
+
+    print('Done!')
 
 if __name__ == '__main__':
     #evaluation_report_maker('Exame AMC Época Normal', '31/02/2024, 10:30', 'Simão', '92648', 'ist192648', 'LMAC', 'A', ['A', 'B', 'C', 'D', 'E'] + ['A'] * 39, ['A', 'D', 'E', '', 'A'] + ['A'] * 39, 2, 3, 0, '19,5', '/Users/simaoleal/Desktop/Multiple_Choice_Grader/input/Scanned from a Xerox Multifunction Printer001.jpg')

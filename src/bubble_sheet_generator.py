@@ -5,6 +5,8 @@ import json
 import os
 import fitz
 import tempfile
+import subprocess
+from tqdm import tqdm
 
 def answer_sheet_maker(number_of_questions, number_of_answers, number_of_versions, print_version = None, answer_key = None, file_name = 'reference'):
 
@@ -45,7 +47,8 @@ def answer_sheet_maker(number_of_questions, number_of_answers, number_of_version
         with open(f"{directory}/bubble_sheet.tex", "w") as f:
             f.write(tex)
         
-        os.system(f"pdflatex -output-directory={directory} --interaction=batchmode {directory}/bubble_sheet.tex")
+        subprocess.run(["pdflatex", f"-output-directory={directory}", "-interaction=nonstopmode", f"{directory}/bubble_sheet.tex"],
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
         
         if(print_version != None or answer_key != None):
             os.system(f"cp {directory}/bubble_sheet.pdf answer_sheets/{file_name}.pdf")
@@ -55,7 +58,7 @@ def answer_sheet_maker(number_of_questions, number_of_answers, number_of_version
             page = doc[0]
             mat = fitz.Matrix(2.08, 2.08)
             pixmap = page.get_pixmap(matrix = mat)
-            pixmap.save("OMR_input/reference.png")
+            pixmap.save("aux/OMR_input/reference.png")
             
             
             
@@ -133,11 +136,28 @@ def template_maker(number_of_questions, number_of_answers, number_of_versions):
     with open("aux/OMR_input/template.json", "w") as f:
             json.dump(template, f)
         
-        
-if __name__ == '__main__':
-    template_maker(10, 5, 6)
-    w = ['A', 'B', 'C', 'D', 'E', 'F']
+    
+def bubbles(number_of_questions, number_of_answers, number_of_versions):
+    print('Making answer sheets, template and reference')
+    p_bar = tqdm(total = number_of_versions + 3)
 
-    for version in w:
-        answer_sheet_maker(10, 5, 6, print_version = version, file_name = f"test_version_{version}")
+    #make template
+    template_maker(number_of_questions, number_of_answers, number_of_versions)
+    p_bar.update(1)
+
+    #make reference
+    answer_sheet_maker(number_of_questions, number_of_answers, number_of_versions)
+    p_bar.update(1)
+
+    #make answer sheets
+    answer_sheet_maker(number_of_questions, number_of_answers, number_of_versions, file_name="exam_no_version")
+    p_bar.update(1)
+    for version in string.ascii_uppercase[:number_of_versions]:
+        answer_sheet_maker(10, 5, 6, print_version = version, file_name = f"exam_version_{version}")
+        p_bar.update(1)
+    p_bar.close()
+    print('Done!')
+    
+if __name__ == '__main__':
+    bubbles(10, 5, 6)
     

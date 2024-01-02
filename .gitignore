@@ -7,4 +7,5 @@
 OMR_input/template.json
 output/*
 input/*
+aux/*
 *.pyc

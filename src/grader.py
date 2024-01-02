@@ -2,7 +2,7 @@ import tempfile
 import os
 from src.toolbox import get_student_list, get_reading_results, header_style, text_style, red_center, green_center, integer_style, grade_style, center
 import string
-from grading_function import grading_function
+from config.grading_function import grading_function
 import xlwt
 import json
 

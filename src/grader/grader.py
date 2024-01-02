@@ -4,8 +4,9 @@ from src.toolbox import get_student_list, get_reading_results, header_style, tex
 import string
 from grading_function import grading_function
 import xlwt
+import json
 
-def evaluation_report_maker(exam_name, exam_date, name, number, ist_id, course, version,
+def evaluation_report_maker(file_name, exam_name, exam_date, name, number, course, version,
                              answer_key, answers, correct, incorrect, unanswered, grade, path):
     colwidth = '11pt'
     def make_table(answer_key, answers, start):
@@ -47,13 +48,14 @@ def evaluation_report_maker(exam_name, exam_date, name, number, ist_id, course, 
         
         os.system(f"pdflatex -output-directory={directory} --interaction=batchmode {directory}/evaluation_report.tex")
         os.system("mkdir -p output/evaluation_reports")
-        os.system(f"cp {directory}/evaluation_report.pdf output/evaluation_reports/{ist_id}.pdf")
+        os.system(f"cp {directory}/evaluation_report.pdf output/evaluation_reports/{file_name}.pdf")
        
 def grader(exam_name, exam_date, number_of_versions, number_of_questions, answer_keys):
 
     student_list = get_student_list()
     reading_results = get_reading_results(number_of_questions)
     grades = dict()
+    email_adresses = dict()
 
     #checking if all problems were fixed
     for number in reading_results:
@@ -91,7 +93,7 @@ def grader(exam_name, exam_date, number_of_versions, number_of_questions, answer
     numbers = list(reading_results.keys())
     numbers.sort(key=lambda x: int(x))
     for row, number in enumerate(numbers, start=1):
-        ist_id, name, degree = student_list[number]
+        email, name, degree = student_list[number]
         input_file, version, answers = reading_results[number]
 
         #calculating grade 
@@ -108,9 +110,12 @@ def grader(exam_name, exam_date, number_of_versions, number_of_questions, answer
         grade = round(float(grading_function(correct, incorrect, unanswered)),1)
         grades[number] = grade
         
+        file_name = f"{exam_name.replace(' ', '_')}_{number}"
         #write evaluation report
-        evaluation_report_maker(exam_name, exam_date, name, number, ist_id, degree, version, answer_keys[version], answers, 
+        evaluation_report_maker(file_name, exam_name, exam_date, name, number, degree, version, answer_keys[version], answers, 
                                 correct, incorrect, unanswered, str(grade).replace('.', ','), input_file)
+        #save email adress
+        email_adresses[file_name] = email
         
         #write to excel
         detailed_sheet.write(row, 0, number, text_style)
@@ -152,8 +157,12 @@ def grader(exam_name, exam_date, number_of_versions, number_of_questions, answer
     for column, width in enumerate([2000,12000,3000]):
         grades_sheet.col(column).width = width
 
+    #save excel
     wb.save('output/graded_results.xls')
 
+    #save email adresses
+    with open('output/evaluation_reports/email_adresses.json', 'w') as f:
+        json.dump(email_adresses, f)
 
 if __name__ == '__main__':
     #evaluation_report_maker('Exame AMC Época Normal', '31/02/2024, 10:30', 'Simão', '92648', 'ist192648', 'LMAC', 'A', ['A', 'B', 'C', 'D', 'E'] + ['A'] * 39, ['A', 'D', 'E', '', 'A'] + ['A'] * 39, 2, 3, 0, '19,5', '/Users/simaoleal/Desktop/Multiple_Choice_Grader/input/Scanned from a Xerox Multifunction Printer001.jpg')

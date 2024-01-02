@@ -20,7 +20,7 @@ def reader(number_of_questions, number_of_versions, number_of_answers):
     file = glob.glob('output/OMR_output/Results/Results*.csv')[0]
     wb = xlwt.Workbook()
     ws = wb.add_sheet('Results')
-    header = ["Input File", "IST-ID", "Number", "Name", "Degree", "Version"] + [f"Q{i}" for i in range(1, number_of_questions + 1)]
+    header = ["Input File", "Number", "Name", "Degree", "Version"] + [f"Q{i}" for i in range(1, number_of_questions + 1)]
     for i, t in enumerate(header):
         ws.write(0, i, t, header_style)
 
@@ -42,36 +42,35 @@ def reader(number_of_questions, number_of_versions, number_of_answers):
 
             if number in student_list:
                 if number not in already_read:
-                    ist_id, name, degree = student_list[number]
-                    ws.write(i, 2, number, text_style)
+                    _, name, degree = student_list[number]
+                    ws.write(i, 1, number, text_style)
                     already_read.append(number)
                 else:
                     error_counter += 1
-                    ist_id, name, degree = "DUPLICATE", "THIS STUDENT NUMBER WAS SEEN TWICE", "DUPLICATE"
-                    ws.write(i, 2, number, red)
+                    _, name, degree = "DUPLICATE", "THIS STUDENT NUMBER WAS SEEN TWICE", "DUPLICATE"
+                    ws.write(i, 1, number, red)
             else:
                 error_counter += 1
                 ist_id, name, degree = "NOT FOUND", "STUDENT NUMBER NOT FOUND IN STUDENT LIST", "NOT FOUND"
-                ws.write(i, 2, number, red)
+                ws.write(i, 1, number, red)
 
-            ws.write(i, 1, ist_id)
-            ws.write(i, 3, name)
-            ws.write(i, 4, degree)
+            ws.write(i, 2, name)
+            ws.write(i, 3, degree)
 
             if version in string.ascii_uppercase[:number_of_versions]:
-                ws.write(i, 5, version)
+                ws.write(i, 4, version)
             else:
                 error_counter += 1
-                ws.write(i, 5, "ERR", red)
+                ws.write(i, 4, "ERR", red)
             
-            for j, t in enumerate(answers, start=6):
+            for j, t in enumerate(answers, start=5):
                 if t not in list(string.ascii_uppercase[:number_of_answers]):
                     warning_counter += 1
                     ws.write(i, j, "", yellow)
                 else:
                     ws.write(i, j, t)
 
-            for column, width in enumerate([3000,3000,2000,12000,3000,2000] + [1150] * number_of_questions):
+            for column, width in enumerate([3000,2000,12000,3000,2000] + [1150] * number_of_questions):
                 ws.col(column).width = width
 
     wb.save("output/reading_results.xls")

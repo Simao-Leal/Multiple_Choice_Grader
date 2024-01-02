@@ -7,6 +7,7 @@ import glob
 import json
 from pathlib import Path
 import getpass
+from tqdm import tqdm
 
 def send_email(sender_email, sender_password, recipient_email, subject, body, attachment_file_path):
     message = MIMEMultipart()
@@ -48,14 +49,14 @@ def sender():
         subject = lines[0]
         body = '\n'.join(lines[1:])
 
+    print('Sending emails:')
     evaluation_reports = glob.glob('output/evaluation_reports/*.pdf')
-    for path in evaluation_reports:
+    for path in tqdm(evaluation_reports):
         filename = Path(path).stem
-        print(email_adresses[filename])
-        receiver = 'simao.frg.leal@gmail.com' #email_adresses[filename]
+        receiver = email_adresses[filename]
         send_email(sender_email, sender_password, receiver, subject, body, path)
+    print('Done!')
 
 
 if __name__ == '__main__':
-    #send_email(sender_email, sender_password, recipient_email, subject, body, file_path)
     sender()

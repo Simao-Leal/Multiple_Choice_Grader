@@ -50,7 +50,7 @@ def answer_sheet_maker(number_of_questions, number_of_answers, number_of_version
         subprocess.run(["pdflatex", f"-output-directory={directory}", "-interaction=nonstopmode", f"{directory}/bubble_sheet.tex"],
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
         
-        if(print_version != None or answer_key != None):
+        if(print_version != None or answer_key != None or file_name != "reference"):
             os.system(f"cp {directory}/bubble_sheet.pdf answer_sheets/{file_name}.pdf")
             
         else:
@@ -150,10 +150,10 @@ def bubbles(number_of_questions, number_of_answers, number_of_versions):
     p_bar.update(1)
 
     #make answer sheets
-    answer_sheet_maker(number_of_questions, number_of_answers, number_of_versions, file_name="exam_no_version")
+    answer_sheet_maker(number_of_questions, number_of_answers, number_of_versions, file_name="answer_sheet_no_version")
     p_bar.update(1)
     for version in string.ascii_uppercase[:number_of_versions]:
-        answer_sheet_maker(10, 5, 6, print_version = version, file_name = f"exam_version_{version}")
+        answer_sheet_maker(10, 5, 6, print_version = version, file_name = f"answer_sheet_version_{version}")
         p_bar.update(1)
     p_bar.close()
     print('Done!')

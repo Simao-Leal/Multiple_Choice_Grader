@@ -1,9 +1,15 @@
 {
-	"answers_per_question" : 6,
-	"number_of_questions" : 6,
-	"number_of_versions" : 2,
+	"exam_name" : "Exame 1",
+	"exam_date" : "17/01/2024, 10:30",
+	"number_of_questions" : 10,
+	"options_per_question" : 5,
+	"number_of_versions" : 6,
 	"answer_keys" : {
-		"A" : ["A", "B", "C", "D", "E", "F"],
-		"B" : "ACDEFC"
+		"A" : ["A", "B", "C", "D", "E", "B", "A", "B", "C", "D"],
+		"B" : "ACDEACABDE",
+		"c" : "abceaabcda",
+		"d" : "abcdaecdab",
+		"e" : "abcdbdecab",
+		"F" : "AbAcBDEcaA"
 	}
 }

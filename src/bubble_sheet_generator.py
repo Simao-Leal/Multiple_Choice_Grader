@@ -153,7 +153,8 @@ def bubbles(number_of_questions, number_of_answers, number_of_versions):
     answer_sheet_maker(number_of_questions, number_of_answers, number_of_versions, file_name="answer_sheet_no_version")
     p_bar.update(1)
     for version in string.ascii_uppercase[:number_of_versions]:
-        answer_sheet_maker(10, 5, 6, print_version = version, file_name = f"answer_sheet_version_{version}")
+        answer_sheet_maker(number_of_questions, number_of_answers, number_of_versions, 
+                           print_version = version, file_name = f"answer_sheet_version_{version}")
         p_bar.update(1)
     p_bar.close()
     print('Done!')

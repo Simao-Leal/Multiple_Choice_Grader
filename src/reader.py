@@ -4,16 +4,18 @@ import csv
 import xlwt
 import xlrd
 import string
-import re
+import subprocess
 from src.toolbox import remove_left_zeros, get_student_list, red, yellow, header_style, right_aligned, text_style
 
 
-def reader(number_of_questions, number_of_versions, number_of_answers):
+def reader(number_of_questions, number_of_answers, number_of_versions):
+    print('Reading...')
     student_list = get_student_list()
 
     #OMR analysis 
     os.system("rm -f -r aux/OMR_output")
-    os.system("python src/OMRChecker-master/main.py --inputDir aux/OMR_input --outputDir aux")
+    subprocess.run(["python", "src/OMRChecker-master/main.py", "--inputDir", "aux/OMR_input", "--outputDir", "aux"],
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
     os.system("mv aux/input aux/OMR_output")
 
     #writing results to excel

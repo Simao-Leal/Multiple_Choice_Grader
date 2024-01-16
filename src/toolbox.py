@@ -30,7 +30,12 @@ def get_student_list():
     student_list = dict()
     wb = xlrd.open_workbook(student_list_file)
     ws = wb.sheet_by_index(0)
-    for number, email, name, degree in zip(ws.col_slice(1,1), ws.col_slice(3,1), ws.col_slice(2,1), ws.col_slice(9,1)):
+    header = ws.row_values(0,0)
+    number_column = header.index("Número")
+    email_column = header.index("Email")
+    name_column = header.index("Nome")
+    degree_column = header.index("Curso")
+    for number, email, name, degree in zip(ws.col_slice(number_column,1), ws.col_slice(email_column,1), ws.col_slice(name_column,1), ws.col_slice(degree_column,1)):
         short_degree = re.search("-\s(\w*)\s", degree.value).group(1)
         student_list[str(int(number.value))] = (email.value, name.value, short_degree)
     return student_list

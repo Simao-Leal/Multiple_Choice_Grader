@@ -53,13 +53,13 @@ def reader(number_of_questions, number_of_answers, number_of_versions):
                     ws.write(i, 1, number, red)
             else:
                 error_counter += 1
-                ist_id, name, degree = "NOT FOUND", "STUDENT NUMBER NOT FOUND IN STUDENT LIST", "NOT FOUND"
+                name, degree = "STUDENT NUMBER NOT FOUND IN STUDENT LIST", "NOT FOUND"
                 ws.write(i, 1, number, red)
 
             ws.write(i, 2, name)
             ws.write(i, 3, degree)
 
-            if version in string.ascii_uppercase[:number_of_versions]:
+            if version in list(string.ascii_uppercase[:number_of_versions]):
                 ws.write(i, 4, version)
             else:
                 error_counter += 1

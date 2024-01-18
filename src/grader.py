@@ -30,7 +30,7 @@ def evaluation_report_maker(file_name, exam_name, exam_date, name, number, cours
         res += r'\hline' + '\n'
         res += r'\textbf{Resposta}' 
         for answer, key in zip(answers, answer_key):
-            res += '&' + ('\cellcolor{green!25}' if answer == key else '\cellcolor{red!25}') + f'{answer}'
+            res += '&' + ('\cellcolor{green!25}' if answer in key and answer != '' else '\cellcolor{red!25}') + f'{answer}'
         res += r'\\' + '\n'
         res += r'\hline' + '\n'
         res += r'\end{tabular}'
@@ -107,7 +107,7 @@ def grader(exam_name, exam_date, number_of_versions, number_of_questions, answer
             if answer == '':
                 unanswered += 1
             else:
-                if answer == key:
+                if answer in key:
                     correct += 1
                 else:
                     incorrect += 1
@@ -172,5 +172,5 @@ def grader(exam_name, exam_date, number_of_versions, number_of_questions, answer
     print('Done!')
 
 if __name__ == '__main__':
-    #evaluation_report_maker('Exame AMC Época Normal', '31/02/2024, 10:30', 'Simão', '92648', 'ist192648', 'LMAC', 'A', ['A', 'B', 'C', 'D', 'E'] + ['A'] * 39, ['A', 'D', 'E', '', 'A'] + ['A'] * 39, 2, 3, 0, '19,5', '/Users/simaoleal/Desktop/Multiple_Choice_Grader/input/Scanned from a Xerox Multifunction Printer001.jpg')
-    grader('Exame 1', '31/02/2024, 10:30', 6, 10, {'A':['A']*10, 'B':['A']*10, 'C':['A']*10, 'D':['A']*10, 'E':['A']*10, 'F':['A']*10})
+    evaluation_report_maker('urmom', 'Exame AMC Época Normal', '31/02/2024, 10:30', 'Simão', '92648', 'LMAC', 'A', ['A', 'ABCDE', 'C', 'D', 'E'] + ['A'] * 39, ['A', 'D', 'E', '', 'A'] + ['A'] * 39, 2, 3, 0, '19,5', '/Users/simaoleal/Desktop/AMC_Exame_1/input/teste001.jpg')
+    #grader('Exame 1', '31/02/2024, 10:30', 6, 10, {'A':['A']*10, 'B':['A']*10, 'C':['A']*10, 'D':['A']*10, 'E':['A']*10, 'F':['A']*10})

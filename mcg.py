@@ -33,16 +33,17 @@ def standardize_config(config):
     if config["number_of_versions"] > 6:
         raise Exception('Bad config: Maximum number of versions is 6.')
     
-    if list(map(lambda x: x.capitalize(), config['answer_keys'])) != list(string.ascii_uppercase[:config['number_of_versions']]):
+    if list(map(lambda x: x.upper(), config['answer_keys'])) != list(string.ascii_uppercase[:config['number_of_versions']]):
         raise Exception(f'Bad config: wrong number of versions in answer_keys. Versions should be between A and {string.ascii_uppercase[config["number_of_versions"] - 1]}.')
     
     new_answer_keys = dict()
     for key in config['answer_keys']:
-        new_answer_keys[key.capitalize()] = [c.capitalize() for c in config['answer_keys'][key]]
-        if len(new_answer_keys[key.capitalize()]) != config["number_of_questions"]:
-            raise Exception(f'Bad config: wrong number of answers in answer key for version {key.capitalize()}.')
-        if any(map(lambda x: x not in string.ascii_uppercase[:config["options_per_question"]], new_answer_keys[key.capitalize()])):
-            raise Exception(f'Bad config: bad answers in answer key for version {key.capitalize()}. Answers should be between A and {string.ascii_uppercase[config["options_per_question"] - 1]}.')
+        new_answer_keys[key.upper()] = [c.upper() for c in config['answer_keys'][key]]
+        if len(new_answer_keys[key.upper()]) != config["number_of_questions"]:
+            raise Exception(f'Bad config: wrong number of answers in answer key for version {key.upper()}.')
+
+        if any(map(lambda s: any(map(lambda x: x not in string.ascii_uppercase[:config["options_per_question"]], s)), new_answer_keys[key.upper()])):
+            raise Exception(f'Bad config: bad answers in answer key for version {key.upper()}. Answers should be between A and {string.ascii_uppercase[config["options_per_question"] - 1]}.')
         
     config['answer_keys'] = new_answer_keys
 

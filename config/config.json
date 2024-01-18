@@ -5,7 +5,7 @@
 	"options_per_question" : 5,
 	"number_of_versions" : 6,
 	"answer_keys" : {
-		"A" : ["A", "B", "C", "D", "E", "B", "A", "B", "C", "D"],
+		"A" : ["A", "B", "C", "AD", "EA", "B", "A", "B", "C", "D"],
 		"B" : "ACDEACABDE",
 		"c" : "abceaabcda",
 		"d" : "abcdaecdab",

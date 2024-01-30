@@ -7,6 +7,14 @@ import xlwt
 import json
 from tqdm import tqdm
 import subprocess
+import math
+
+def round(x, n):
+    #overloading python round function so that 0.5 always rounds up
+    if x * 10 ** n - math.floor(x * 10 ** n) < 0.5:
+        return math.floor(x * 10 ** n) / 10 ** n
+    else:
+        return math.ceil(x * 10 ** n) / 10 ** n
 
 def evaluation_report_maker(file_name, exam_name, exam_date, name, number, course, version,
                              answer_key, answers, correct, incorrect, unanswered, grade, path):
@@ -128,7 +136,7 @@ def grader(exam_name, exam_date, number_of_versions, number_of_questions, answer
         detailed_sheet.write(row, 2, degree)
         detailed_sheet.write(row, 3, version, center)
         for i, col in enumerate(range(4, 4 + number_of_questions)):
-            if answers[i] == answer_keys[version][i]:
+            if answers[i] in answer_keys[version][i] and answers[i] != '':
                 detailed_sheet.write(row, col, answers[i], green_center)
             else:
                 detailed_sheet.write(row, col, answers[i], red_center)

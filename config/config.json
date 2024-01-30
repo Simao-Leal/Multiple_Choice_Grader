@@ -1,15 +1,13 @@
 {
-	"exam_name" : "Exame 1",
-	"exam_date" : "17/01/2024, 10:30",
-	"number_of_questions" : 10,
+	"exam_name" : "Exame EN",
+	"exam_date" : "17/01/2024, 18:00 -- 20:00",
+	"number_of_questions" : 20,
 	"options_per_question" : 5,
-	"number_of_versions" : 6,
+	"number_of_versions" : 4,
 	"answer_keys" : {
-		"A" : ["A", "B", "C", "AD", "EA", "B", "A", "B", "C", "D"],
-		"B" : "ACDEACABDE",
-		"c" : "abceaabcda",
-		"d" : "abcdaecdab",
-		"e" : "abcdbdecab",
-		"F" : "AbAcBDEcaA"
+		"A" : ["E", "C", "C", "B", "D", "A", "A", "D", "A", "B", "B", "A", "D", "D", "E", "C", "C", "E", "BE", "A"],
+		"B" : ["E", "A", "A", "D", "A", "B", "B", "A", "B", "C", "B", "A", "A", "A", "E", "D", "C", "E", "CE", "B"],
+		"C" : ["C", "C", "E", "B", "D", "A", "D", "A", "B", "A", "B", "A", "D", "D", "E", "C", "C", "BE", "E", "A"],
+		"D" : ["A", "E", "A", "D", "A", "B", "A", "B", "C", "B", "B", "A", "A", "E", "D", "A", "CE", "C", "E", "B"]
 	}
 }

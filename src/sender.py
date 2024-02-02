@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import getpass
 from tqdm import tqdm
+import time
 
 def send_email(sender_email, sender_password, recipient_email, subject, body, attachment_file_path):
     message = MIMEMultipart()
@@ -55,6 +56,7 @@ def sender():
         filename = Path(path).stem
         receiver = email_adresses[filename]
         send_email(sender_email, sender_password, receiver, subject, body, path)
+        time.sleep(5) #prevent too many connections
     print('Done!')
 
 

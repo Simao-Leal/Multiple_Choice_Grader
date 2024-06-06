@@ -97,9 +97,21 @@ A preparação e correção de um exame consiste em 5 passos.
   Necessário para o passo 1. É o template LaTeX utilizado para gerar as folhas de respostas. Aqui pode ser configurado o cabeçalho da folha de respostas. Certas linhas não devem ser alteradas. Estão devidamente identificadas com comentários.
 
   ### `config/evaluation_report_template.tex`
-  Necessário para o passo 3. É o template LaTeX utilizado para gerar os relatórios de avaliação. Pode ser alterado caso haja alguma informação importante a transmitir (exemplo: na pergunta x duas respostas foram consideradas corretas). Não é um ficheiro LaTeX puro. Contém placeholders que são substituídos por valores. São da forma `{<atributo>}`. As chavetas têm então de ser escapadas. Utilizam-se duas chavetas para escapar uma. Ou seja, `{{` é interpretado como `{`.
-</details>
+  Necessário para o passo 3. É o template LaTeX utilizado para gerar os relatórios de avaliação. Pode ser alterado caso haja alguma informação importante a transmitir (exemplo: a fórmula de cálculo da nota é ... ou na pergunta x duas respostas foram consideradas corretas). Não é um ficheiro LaTeX puro. Contém placeholders que são substituídos por valores. São da forma `{<atributo>}`. As chavetas têm então de ser escapadas. Utilizam-se duas chavetas para escapar uma. Ou seja, `{{` é interpretado como `{`.
 
+ ### `config/grading_function.py`
+Necessério para o passo 3. Ficheiro que deve conter uma função Python `grading_function` que recebe o número de respostas certas, incorretas e não respondidas e retorna a nota do teste. Exemplo
+```python
+def grading_function(correct, incorrect, unanswered):
+    return max((correct - 4) * 1.25, 0)
+```
+
+
+### `config/email_text.txt`
+ 	Necessário para o passo 4. Um ficheiro de texto que contém o subject e o corpo do e-mail enviado aos alunos. A primeira linha do ficheiro é o subject, as restantes são o corpo.
+
+ 
+</details>
 <details>
    <summary><b> 1. Geração de folhas de resposta</b></summary>
 

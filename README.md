@@ -42,7 +42,7 @@ pip install -r requirements.txt
 
 </details>
 
-<details><summary><b>3. Instalar $\LaTeX$</b></summary>
+<details><summary><b>3. Instalar</b> $\LaTeX$</summary>
 
 É necessário que o utilizador tenha instalado na linha de comandos o comando `pdflatex`. Instalar LaTeX é todo um bicho de sete cabeças, mas não será muito difícil de perceber como fazê-lo com a ajuda da internet. Para verificar que a instalação está bem feita basta verificar se o seguinte comando apresenta a versão instalada:
 ```bash
@@ -52,7 +52,7 @@ pdflatex --version
 </details>
 
 ## Guia de utilização
-A preparação e correção de um exame consiste em 5 passos.
+A preparação e correção de um exame consiste em 6 passos.
 <details>
    <summary><b> 0. Configuração</b></summary>
   Várias destas etapas têm passos de configuração que serão delineados nas mesmas. Um ficheiro de configuração estará sempre na pasta `config`.
